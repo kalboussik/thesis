@@ -1,12 +1,6 @@
-# Federated two-stage IDS on ToN-IoT — experiment kit (Chapter 6, detection track)
+# Federated two-stage IDS on ToN-IoT
 
-Measured federated-learning detection results to replace the *estimated* numbers
-in Chapter 6, and to establish the FL ↔ blockchain link: each FL round's
-model-update hash is the on-chain coordination transaction whose **cost** you
-already measured with Caliper. Run it, bring back `results/`, and the French
-detection section gets written from your real numbers.
-
-## Design (as agreed)
+## Design
 
 - **Dataset:** ToN-IoT `Train_Test_Network.csv` (per-flow tabular).
 - **Labels:** collapsed to 5 classes — `benign, bruteforce, ddos, dos, portscan`
@@ -19,7 +13,7 @@ detection section gets written from your real numbers.
 - **Partitioning:** **non-IID** (Dirichlet, α = 0.5, fixed across the sweep) plus
   an **IID baseline** for comparison.
 - **Implementations:** a transparent **manual FedAvg** loop *and* **Flower**, on
-  identical deterministic partitions — an implementation-agreement check.
+  identical deterministic partitions.
 - **Repetitions:** 3 seeds → mean ± std.
 
 ## Requirements
@@ -64,7 +58,7 @@ python flower_sim.py   --partition noniid --clients 10 --seed 0
 python aggregate.py
 ```
 
-## What you get (bring this back to me)
+## Results
 
 Under `results/`:
 - `summary_table.csv` — accuracy / macro-F1 / profiler-offload, **mean ± std**
@@ -79,13 +73,7 @@ Zip `results/` and upload it.
 
 ## Time / resource notes
 
-- Each run early-stops (patience 8 on global-val macro-F1), so most runs finish
-  well before 50 rounds.
-- If the full 36-run sweep is too long, run the **manual** loop only first
-  (`run_all.sh` step 2) — it alone produces every detection number needed. Flower
-  is the secondary cross-check; if its simulation engine gives version trouble
-  (it depends on `ray`), the manual results stand on their own and we note the
-  cross-check as future work.
+- Each run early-stops (patience 8 on global-val macro-F1).
 - CPU is fine. A GPU (set `client_resources` num_gpus) speeds Flower up.
 
 ## How this connects to the blockchain chapter
@@ -94,8 +82,7 @@ The federation emits one model update per client per round. Its integrity hash
 (`results/*_update_hashes.jsonl`) is exactly what an agent anchors on-chain via
 the `submitAlert`/coordination chaincode. So the **detection quality** comes from
 this experiment and the **coordination cost** from the Caliper benchmark — two
-measured halves of one system. State this explicitly in §6 so the FL and
-blockchain layers read as integrated, not bolted together.
+measured halves of one system. 
 
 ## Files
 
