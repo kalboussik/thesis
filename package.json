@@ -1,0 +1,14 @@
+{
+  "name": "idsledger",
+  "version": "1.0.0",
+  "description": "Permissioned coordination ledger for distributed multi-agent IoT IDS",
+  "main": "index.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "fabric-chaincode-node start"
+  },
+  "dependencies": {
+    "fabric-contract-api": "^2.5.4",
+    "fabric-shim": "^2.5.4"
+  }
+}

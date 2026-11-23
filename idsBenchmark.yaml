@@ -1,0 +1,109 @@
+# Caliper benchmark configuration — IDS coordination ledger
+# Sweeps offered load to characterise throughput, latency (avg/p95) and
+# success rate for each of the five smart-contract functions.
+#
+# The fixed-rate TPS points below span from the nominal operating point
+# (sub-1 tx/s for a 100-node deployment, see loadModel.js) up to stress
+# levels, so you obtain a full latency-vs-load curve like Marwa's Tables
+# 4.2 / 4.3 rather than a single point.
+
+test:
+  name: ids-coordination-ledger
+  description: >
+    Throughput / latency / success-rate characterisation of the permissioned
+    coordination ledger for the distributed multi-agent IoT IDS (thesis Ch.6).
+  workers:
+    number: 4
+  rounds:
+
+    # ---------- 1. agent registration (burst at deployment) ----------
+    - label: registerAgent_25tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 25 } }
+      workload:
+        module: workload/registerAgent.js
+        arguments: { contractId: idsledger, territories: 8 }
+
+    - label: registerAgent_75tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 75 } }
+      workload:
+        module: workload/registerAgent.js
+        arguments: { contractId: idsledger, territories: 8 }
+
+    # ---------- 2. alert submission (steady-state, swept) ----------
+    - label: submitAlert_10tps
+      txDuration: 90
+      rateControl: { type: fixed-rate, opts: { tps: 10 } }
+      workload:
+        module: workload/submitAlert.js
+        arguments: { contractId: idsledger, agentPool: 20 }
+
+    - label: submitAlert_25tps
+      txDuration: 90
+      rateControl: { type: fixed-rate, opts: { tps: 25 } }
+      workload:
+        module: workload/submitAlert.js
+        arguments: { contractId: idsledger, agentPool: 20 }
+
+    - label: submitAlert_50tps
+      txDuration: 90
+      rateControl: { type: fixed-rate, opts: { tps: 50 } }
+      workload:
+        module: workload/submitAlert.js
+        arguments: { contractId: idsledger, agentPool: 20 }
+
+    - label: submitAlert_100tps
+      txDuration: 90
+      rateControl: { type: fixed-rate, opts: { tps: 100 } }
+      workload:
+        module: workload/submitAlert.js
+        arguments: { contractId: idsledger, agentPool: 20 }
+
+    # ---------- 3. alert validation (authorization + integrity) ----------
+    - label: validateAlert_25tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 25 } }
+      workload:
+        module: workload/validateAlert.js
+        arguments: { contractId: idsledger, prepared: 300 }
+
+    - label: validateAlert_50tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 50 } }
+      workload:
+        module: workload/validateAlert.js
+        arguments: { contractId: idsledger, prepared: 300 }
+
+    # ---------- 4. reputation update ----------
+    - label: updateReputation_25tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 25 } }
+      workload:
+        module: workload/validateAlert.js   # reuse seeding; see note in README
+        arguments: { contractId: idsledger, prepared: 100 }
+
+    # ---------- 5. history query (read-only) ----------
+    - label: queryHistory_50tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 50 } }
+      workload:
+        module: workload/queryHistory.js
+        arguments: { contractId: idsledger }
+
+    - label: queryHistory_200tps
+      txDuration: 60
+      rateControl: { type: fixed-rate, opts: { tps: 200 } }
+      workload:
+        module: workload/queryHistory.js
+        arguments: { contractId: idsledger }
+
+monitors:
+  resource:
+    - module: docker
+      options:
+        interval: 5
+        containers:
+          - peer0.org1.example.com
+          - peer0.org2.example.com
+          - orderer.example.com

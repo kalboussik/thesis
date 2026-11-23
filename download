@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Data (do not commit datasets)
+*.csv
+*.pcap
+data/
+data_botiot/
+
+# Results / artifacts
+results/
+results_*/
+*.ckpt
+*.h5
+*.keras
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,9 @@
+{
+  "name": "ids-blockchain-bench",
+  "version": "1.0.0",
+  "description": "Caliper benchmark for the IDS coordination ledger",
+  "engines": { "node": ">=18 <19" },
+  "dependencies": {
+    "@hyperledger/caliper-cli": "0.6.0"
+  }
+}
