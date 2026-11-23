@@ -2,12 +2,7 @@
 
 Turnkey scaffold to **implement and measure** the permissioned blockchain
 coordination layer for the distributed multi-agent IoT IDS (thesis Chapter 6).
-Run it, then hand the `results/` folder back and the French chapter gets
-written from your **real** numbers.
 
-This replaces the previously *estimated* figures (tx/day, validation latency,
-ledger growth, CPU) with measured ones — the methodological standard set by
-Marwa's Ganache/Web3 benchmark, transposed to your permissioned Fabric design.
 
 ---
 
@@ -62,8 +57,6 @@ Under `results/`:
 - `ledger_growth.csv` — on-disk ledger bytes before/after each repetition →
   your **ledger growth rate** (KB/day once scaled by the load model).
 
-Send me the whole `results/` folder (HTML + CSV). That is everything I need to
-write the measurement tables and analysis in French.
 
 ## 5. Tear down
 
@@ -80,8 +73,7 @@ explicit model: window `W = 30 s`, peak attack fraction `p_attack = 0.20`, so a
 network of `N` nodes generates `N·p_attack/W` confirmed-alert tx/s at the
 nominal operating point (e.g. ~0.67 tx/s for N=100). The benchmark deliberately
 sweeps **well above** that (10→100 TPS) to produce a full latency-vs-load curve
-and locate the saturation point — exactly the kind of curve in Marwa's
-Tables 4.2/4.3.
+and locate the saturation point
 
 To produce a **scalability table by network size** (matching your 10/25/50/75/100
 simulation points), map each `N` to its nominal TPS via `alertTpsForNetwork(N)`
