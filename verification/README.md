@@ -5,8 +5,6 @@ A small tool to check two things that often go wrong when evaluating deep-learni
 1. **Oversampling leakage.** Applying ADASYN (or SMOTE) to the whole dataset *before* the train/test split puts synthetic samples, interpolated from training data, into the test set. The scores then look better than they really are.
 2. **Misleading memory measurements.** Comparing "whole test set in one batch" with "one time window at a time + profiler" mixes two effects: batch vs streaming processing, and the effect of the profiler itself. This tool measures them separately.
 
-I wrote it to re-check the results of Chapter 5 of my PhD thesis (two-stage IDS: lightweight traffic profiler + CNN-LSTM classifier), but it works with any flow-based dataset that has a timestamp and a binary label.
-
 ## Requirements
 
 - Python 3.8 or newer
